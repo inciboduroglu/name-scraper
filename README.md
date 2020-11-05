@@ -3,5 +3,5 @@
 
 run with:
 ```
-scrapy crawl quotes -O quotes.jl
+scrapy crawl names -O names.jl
 ```
