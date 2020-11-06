@@ -1,4 +1,5 @@
 import scrapy
+import Gender
 
 
 class NamesSpider(scrapy.Spider):
@@ -27,9 +28,12 @@ class NamesSpider(scrapy.Spider):
         yield from page_response.follow_all(pages, callback=self.parse_usage)
 
     def parse_name(self, name_response):
+        feminine = name_response.css(".fem").get()
+        masculine = name_response.css(".masc").get()
         name_info = {
             'name': name_response.css(".namebanner-title::text").get(),
             'usage': name_response.css(".usg::text").getall(),
+            'gender': Gender.get_gender(feminine, masculine),
             'related-names': []
         }
         related_page = name_response.css(".nametab_long::attr(href)").get()
