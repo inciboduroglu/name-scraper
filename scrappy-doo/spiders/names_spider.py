@@ -39,9 +39,12 @@ class NamesSpider(scrapy.Spider):
             'page_name': name_response.meta['page_name']
         }
         related_page = name_response.css(".nametab_long::attr(href)").get()
-        reqqy = name_response.follow(related_page, callback=self.parse_related_names)
-        reqqy.meta['item'] = name_info
-        return reqqy
+        if related_page is not None:
+            reqqy = name_response.follow(related_page, callback=self.parse_related_names)
+            reqqy.meta['item'] = name_info
+            return reqqy
+        else:
+            return name_info
 
     def parse_related_names(self, related_response):
         main = related_response.meta["item"]
