@@ -1,11 +1,15 @@
-import json
+import csv
 
 
 class SpooderPipeline(object):
 
     def process_item(self, item, spider):
         # get category and use it as filename
-        filename = 'names.json'
+        filename = 'names.csv'
 
-        with open(filename, 'w') as f:
-            json.dump(item, f)
+        with open(filename, 'a', newline='') as f:
+            field_names = ['name', 'usage', 'gender', 'related-names']
+
+            writer = csv.DictWriter(f, fieldnames=field_names)
+            # writer.writeheader()
+            writer.writerow(item)
