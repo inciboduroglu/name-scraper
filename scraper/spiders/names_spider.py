@@ -8,11 +8,11 @@ class NamesSpider(scrapy.Spider):
         urls = [
             # "https://www.behindthename.com/names/list",
             # "https://www.behindthename.com/names/usage/eastern-african",
-            # "https://www.behindthename.com/names/usage/english"
-            "https://www.behindthename.com/name/ada"
+            "https://www.behindthename.com/names/usage/hebrew"
+            # "https://www.behindthename.com/name/ada"
         ]
         for url in urls:
-            yield scrapy.Request(url=url, callback=self.parse_name)
+            yield scrapy.Request(url=url, callback=self.parse_usage)
 
     def parse(self, response):
         usages = response.css(".usagelist a::attr(href)").getall()
@@ -22,6 +22,9 @@ class NamesSpider(scrapy.Spider):
         names = page_response.css(".listname a::attr(href)").getall()
 
         yield from page_response.follow_all(names, callback=self.parse_name)
+        # next page
+        pages = page_response.xpath('//*[(@id = "div_pagination")]//a/@href')
+        yield from page_response.follow_all(pages, callback=self.parse_usage)
 
     def parse_name(self, name_response):
         name_info = {
