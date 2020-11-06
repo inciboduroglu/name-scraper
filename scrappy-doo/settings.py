@@ -7,10 +7,10 @@
 #     https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 #     https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 
-BOT_NAME = 'scraper'
+BOT_NAME = 'scrappy-doo'
 
-SPIDER_MODULES = ['scraper.spiders']
-NEWSPIDER_MODULE = 'scraper.spiders'
+SPIDER_MODULES = ['scrappy-doo.spiders']
+NEWSPIDER_MODULE = 'scrappy-doo.spiders'
 
 FEED_EXPORT_ENCODING = 'utf-8'
 
