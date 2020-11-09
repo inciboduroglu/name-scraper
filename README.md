@@ -3,5 +3,5 @@
 
 run with:
 ```
-scrapy crawl names -O names.jl
+scrapy crawl names
 ```
