@@ -1,5 +1,6 @@
 import scrapy
 import Gender
+from preprocessor.formatters import format_culture_name
 
 
 class NamesSpider(scrapy.Spider):
@@ -20,7 +21,7 @@ class NamesSpider(scrapy.Spider):
         yield from response.follow_all(usages, callback=self.parse_usage)
 
     def parse_usage(self, page_response):
-        page_name = page_response.css("h1::text").get()
+        page_name = format_culture_name(page_response.css("h1::text").get())
         names = page_response.css(".listname a::attr(href)").getall()
 
         yield from page_response.follow_all(names, callback=self.parse_name, meta={'page_name': page_name})
