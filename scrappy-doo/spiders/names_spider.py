@@ -1,5 +1,6 @@
 import scrapy
 import Gender
+from preprocessor.formatters import format_culture_name
 
 
 class NamesSpider(scrapy.Spider):
@@ -21,8 +22,7 @@ class NamesSpider(scrapy.Spider):
 
     def parse_usage(self, page_response):
         # create a file to fill
-        page_name = page_response.css("h1::text").get()
-
+        page_name = format_culture_name(page_response.css("h1::text").get())
         # get all the names on the page
         names = page_response.css(".listname a::attr(href)").getall()
 
