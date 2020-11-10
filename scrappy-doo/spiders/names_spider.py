@@ -21,17 +21,23 @@ class NamesSpider(scrapy.Spider):
         yield from response.follow_all(usages, callback=self.parse_usage)
 
     def parse_usage(self, page_response):
+        # create a file to fill
         page_name = format_culture_name(page_response.css("h1::text").get())
+        # get all the names on the page
         names = page_response.css(".listname a::attr(href)").getall()
 
+        # parse all the names
         yield from page_response.follow_all(names, callback=self.parse_name, meta={'page_name': page_name})
-        # next page
+        # go to next page
         pages = page_response.xpath('//*[(@id = "div_pagination")]//a/@href')
         yield from page_response.follow_all(pages, callback=self.parse_usage)
 
     def parse_name(self, name_response):
+        # determine gender
         feminine = name_response.css(".fem").get()
         masculine = name_response.css(".masc").get()
+
+        # create name info
         name_info = {
             'name': name_response.css(".namebanner-title::text").get(),
             'usage': name_response.css(".usg::text").getall(),
@@ -39,7 +45,11 @@ class NamesSpider(scrapy.Spider):
             'related-names': [],
             'page_name': name_response.meta['page_name']
         }
+
+        # extract related names link
         related_page = name_response.css(".nametab_long::attr(href)").get()
+
+        # add related names
         if related_page is not None:
             reqqy = name_response.follow(related_page, callback=self.parse_related_names)
             reqqy.meta['item'] = name_info
